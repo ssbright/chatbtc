@@ -4,6 +4,9 @@ from telegram.ext.filters import BaseFilter
 from dotenv import load_dotenv
 import os 
 
+#local imports
+from gpt import generate_text
+
 load_dotenv()
 
 # Set up your Telegram bot token here
@@ -40,7 +43,11 @@ def handle_prompt(update, context):
     prompt_text = ' '.join(context.args)
     # Do something with the prompt_text
     # For example, send a response back to the user
-    update.message.reply_text('You said: ' + prompt_text)
+    update.message.reply_text('You asked: "' + prompt_text + '" Send me sats first and I will answer!')
+    message = generate_text(prompt_text)
+    context.bot.send_message(chat_id=update.message.chat_id, text=f"This is the message: {message}")
+
+    
 
 # Add the handler function to the dispatcher
 updater.dispatcher.add_handler(CommandHandler('prompt', handle_prompt))
