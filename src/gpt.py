@@ -17,7 +17,11 @@ def generate_text(prompt):
         stop=None,
         temperature=0.7,
     )
-    message = response.choices[0].text.strip()
-    print("This is the message", message)
-    return message
+    if len(response.choices[0].text) > 4096:
+        # Truncate the response to the maximum length
+        response_text = response.choices[0].text[:4093] + "..."
+    else:
+        response_text = response.choices[0].text
+    print("This is the message", response_text)
+    return response_text
 

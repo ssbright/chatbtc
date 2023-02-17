@@ -3,3 +3,4 @@ python-telegram-bot==13.5
 lnd-grpc-client
 python-dotenv
 qrcode
+psycopg2-binary

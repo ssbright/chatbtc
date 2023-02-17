@@ -2,6 +2,7 @@ import telegram
 from telegram.ext import CommandHandler, MessageHandler, Filters, Updater
 from telegram.ext.filters import BaseFilter
 from dotenv import load_dotenv
+from rapaygo import create_invoice
 import os 
 
 #local imports
@@ -22,21 +23,6 @@ def respond(update, context):
     user_message = update.message.text
     context.bot.send_message(chat_id=update.message.chat_id, text=f"You said: {user_message}")
 
-# Define the handler function for the /prompt command
-def prompt_handler(update, context):
-    # Get the text following the /prompt command
-    prompt_text = ' '.join(context.args)
-    # Do something with the prompt_text
-    # For example, you can store it in a variable, or use it to generate a response using the OpenAI API
-    print("Received prompt:", prompt_text)
-    context.bot.send_message(chat_id=update.message.chat_id, text=f"This is what you want me to ask chatgpt?: {prompt_text}")
-
-
-
-# Set up the CommandHandler and MessageHandler for your bot
-updater = Updater(bot=bot, persistence=None, use_context=True)
-dispatcher = updater.dispatcher
-
 # Define a handler function to handle the /prompt command
 def handle_prompt(update, context):
     # Read the text after the command
@@ -44,8 +30,19 @@ def handle_prompt(update, context):
     # Do something with the prompt_text
     # For example, send a response back to the user
     update.message.reply_text('You asked: "' + prompt_text + '" Send me sats first and I will answer!')
-    message = generate_text(prompt_text)
-    context.bot.send_message(chat_id=update.message.chat_id, text=f"This is the message: {message}")
+    create_invoice()
+    invoice=create_invoice()
+    # Load the image file
+    with open('invoice.png', 'rb') as f:
+        photo = f.read()
+    context.bot.send_photo(chat_id=update.effective_chat.id, photo=photo, caption=invoice)
+    #message = generate_text(prompt_text)
+    #context.bot.send_message(chat_id=update.message.chat_id, text=f"This is the message: {message}")
+
+# Set up the CommandHandler and MessageHandler for your bot
+updater = Updater(bot=bot, persistence=None, use_context=True)
+dispatcher = updater.dispatcher
+
 
     
 
