@@ -1,4 +1,4 @@
-openapi
+openai
 python-telegram-bot==13.5
 lnd-grpc-client
 python-dotenv
