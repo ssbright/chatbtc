@@ -3,17 +3,10 @@ import requests
 import json
 import os
 from dotenv import load_dotenv
-import psycopg2
 import qrcode
 import qrcode.image.svg
 
 def get_access_token():
-    conn = psycopg2.connect("dbname='rapaygo_invoice' user='sydney'")
-    cur = conn.cursor()
-    cur.execute('select * from user_pos')
-    conn.commit()
-
-    user_table = cur.fetchall()
 
 
     url1 = "https://api.rapaygo.com/v1//auth/key"
