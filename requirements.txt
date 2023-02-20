@@ -4,3 +4,4 @@ lnd-grpc-client
 python-dotenv
 qrcode
 psycopg2-binary
+requests
