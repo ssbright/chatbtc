@@ -1,5 +1,5 @@
 openapi
-python-telegram-bot==13.5
+python-telegram-bot
 lnd-grpc-client
 python-dotenv
 qrcode
