@@ -1,6 +1,7 @@
 botinfo.txt
 /node
 invoice.png
+firstkey.pem
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
