@@ -22,6 +22,6 @@ def generate_text(prompt):
         response_text = response.choices[0].text[:4093] + "..."
     else:
         response_text = response.choices[0].text
-    print("This is the message", response_text)
+    #print("This is the message", response_text)
     return response_text
 

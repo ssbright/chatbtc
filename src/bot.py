@@ -54,19 +54,22 @@ def handle_prompt(update, context):
     context.bot.send_message(chat_id=update.message.chat_id, text=f"This is the message: {message}")
 
 
-# Set up the CommandHandler and MessageHandler for your bot
-updater = Updater(bot=bot, persistence=None, use_context=True)
-dispatcher = updater.dispatcher
-    
-# Add the handler function to the dispatcher
-updater.dispatcher.add_handler(CommandHandler('prompt', handle_prompt))
+try: 
+    # Set up the CommandHandler and MessageHandler for your bot
+    updater = Updater(bot=bot, persistence=None, use_context=True)
+    dispatcher = updater.dispatcher
+        
+    # Add the handler function to the dispatcher
+    updater.dispatcher.add_handler(CommandHandler('prompt', handle_prompt))
 
-start_handler = CommandHandler('start', start)
-message_handler = MessageHandler(Filters.text & (~Filters.command), respond)
+    start_handler = CommandHandler('start', start)
+    message_handler = MessageHandler(Filters.text & (~Filters.command), respond)
 
 
-dispatcher.add_handler(start_handler)
-dispatcher.add_handler(message_handler)
+    dispatcher.add_handler(start_handler)
+    dispatcher.add_handler(message_handler)
 
-# Start the bot
-updater.start_polling()
+    # Start the bot
+    updater.start_polling()
+except Exception as e:
+    print(f"Error:{e}")
