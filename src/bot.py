@@ -19,6 +19,9 @@ bot = telegram.Bot(token)
 def start(update, context):
     context.bot.send_message(chat_id=update.message.chat_id, text="Hello! I'm a bot. How can I help you?")
 
+def help(update, context):
+    context.bot.send_message(chat_id=update.message.chat_id, text="Want to ask me a question? Start your questions with '/prompt' followed by whatever you want to ask!")
+
 # Define the function that will handle user messages
 def respond(update, context):
     user_message = update.message.text
@@ -63,10 +66,12 @@ try:
     updater.dispatcher.add_handler(CommandHandler('prompt', handle_prompt))
 
     start_handler = CommandHandler('start', start)
+    help_handler = CommandHandler('help', help)
     message_handler = MessageHandler(Filters.text & (~Filters.command), respond)
 
 
     dispatcher.add_handler(start_handler)
+    dispatcher.add_handler(help_handler)
     dispatcher.add_handler(message_handler)
 
     # Start the bot
