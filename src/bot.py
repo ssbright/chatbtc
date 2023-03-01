@@ -31,8 +31,8 @@ def wait_for_payment_confirmation(pay_hash, amt):
         time.sleep(1)
         # check if payment has been confirmed
         # if payment is confirmed, set confirmation to True and exit loop
-        if payment_confirmed_checker(pay_hash, amt):
-            status=payment_confirmed_checker(pay_hash, amt) == "COMPLETED"
+        if payment_confirmed_checker(pay_hash, amt) == "COMPLETED":
+            #status=payment_confirmed_checker(pay_hash, amt) == "COMPLETED"
             break
 
 # Define a handler function to handle the /prompt command

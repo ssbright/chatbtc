@@ -9,19 +9,17 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
 def generate_text(prompt):
-    response = openai.Completion.create(
-        engine="davinci",
-        prompt=prompt,
-        max_tokens=1024,
-        n=1,
-        stop=None,
-        temperature=0.7,
+    response = openai.ChatCompletion.create(
+    model="gpt-3.5-turbo",
+    messages=[
+            {"role": "user", "content": prompt},
+        ]
     )
-    if len(response.choices[0].text) > 4096:
+    if len(response['choices'][0]['message']['content']) > 4096:
         # Truncate the response to the maximum length
-        response_text = response.choices[0].text[:4093] + "..."
+        response_text = response_text = response['choices'][0]['message']['content'][:4093] + "..."
     else:
-        response_text = response.choices[0].text
+        response_text = response['choices'][0]['message']['content']
     #print("This is the message", response_text)
     return response_text
 
