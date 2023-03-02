@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 import qrcode
 import qrcode.image.svg
 
-price=2000
+price=300
 
 def get_access_token():
 

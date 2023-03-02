@@ -46,11 +46,12 @@ def handle_prompt(update, context):
     # For example, send a response back to the user
     update.message.reply_text('You asked: "' + prompt_text + '" Send me sats first and I will answer!')
     tokenDict=create_invoice()
-    invoice="Here is your payment request for {} sats: ```{}```".format(tokenDict["amount"],tokenDict["payment_request"])
+    invoice="Here is your payment request for {} sats".format(tokenDict["amount"])
     # Load the image file
     with open('invoice.png', 'rb') as f:
         photo = f.read()
     context.bot.send_photo(chat_id=update.effective_chat.id, photo=photo, caption=invoice)
+    update.message.reply_text('```{}```'.format(tokenDict["payment_request"]))
     pay_hash=tokenDict["payment_hash"]
     wait_for_payment_confirmation(pay_hash, tokenDict["amount"])
     message = generate_text(prompt_text)
