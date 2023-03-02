@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 import qrcode
 import qrcode.image.svg
 
+price=2000
+
 def get_access_token():
 
 
@@ -36,7 +38,7 @@ def create_invoice():
     url2 = "https://api.rapaygo.com/v1/invoice_payment/ln/invoice"
     accessToken = get_access_token()
     payload = {
-      "amount_sats": "{}".format(10),
+      "amount_sats": "{}".format(price),
       "memo": "rapaygo POS invoice",
     }
 
