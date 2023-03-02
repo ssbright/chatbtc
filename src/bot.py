@@ -51,7 +51,7 @@ def handle_prompt(update, context):
     with open('invoice.png', 'rb') as f:
         photo = f.read()
     context.bot.send_photo(chat_id=update.effective_chat.id, photo=photo, caption=invoice)
-    update.message.reply_text('```{}```'.format(tokenDict["payment_request"]))
+    update.message.reply_text('{}'.format(tokenDict["payment_request"]))
     pay_hash=tokenDict["payment_hash"]
     wait_for_payment_confirmation(pay_hash, tokenDict["amount"])
     message = generate_text(prompt_text)
