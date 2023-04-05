@@ -4,3 +4,4 @@ lnd-grpc-client
 python-dotenv
 qrcode
 requests
+telegram
