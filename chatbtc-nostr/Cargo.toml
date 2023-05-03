@@ -10,3 +10,4 @@ dotenv = "0.15.0"
 nostr-sdk = "0.21.0"
 tokio = { version = "1", features = ["full"] }
 nostr-bot = "0.2"
+image = "0.24.6"

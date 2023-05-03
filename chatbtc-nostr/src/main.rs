@@ -3,6 +3,10 @@ use nostr_bot::*;
 use std::env;
 use std::path::PathBuf;
 
+
+
+
+
 // Your struct that will be passed to the commands responses
 struct Votes {
     question: String,
@@ -50,13 +54,11 @@ async fn main() {
     path.push("..");
     path.push(".env");
 
-    let mut logo = PathBuf::from("../images/femalerobot.jpg");
-    logo.set_extension("jpg");
-    assert_eq!(&logo.to_string_lossy(), "../images/femalerobot.jpg");
 
     // Load environment variables from the specified path
     dotenv::from_path(&path).expect("Failed to load .env file");
     dotenv::dotenv().ok();
+
 
     let relays = vec![
         "wss://nostr-pub.wellorder.net",
@@ -80,7 +82,7 @@ async fn main() {
         // You don't have to set these but then the bot will have incomplete profile info :(
         .name("ChatBTC")
         .about("A bot in development....")
-        .picture("./images/femalerobot.jpg")
+        .picture("https://themindfulinquisitor.com/wp-content/uploads/2023/05/2023-05-02-14.26.34.jpg")
         //.intro_message(&intro)
         // You don't have to specify any command but then what will the bot do? Nothing.
         .command(Command::new("!yes", wrap!(yes)))
