@@ -1,94 +1,51 @@
-// Bot that reacts to '!yes', '!no' and '!results' commands.
-use nostr_bot::*;
+extern crate dotenv;
+
 use std::env;
 use std::path::PathBuf;
+use nostr_sdk::prelude::*;
+use std::str::FromStr;
+use nostr_sdk::message::subscription::Filter;
+use std::error::Error as _;
+use std::time::Duration;
+use tokio::time;
+use nostr_bot::Bot;
 
 
-
-
-
-// Your struct that will be passed to the commands responses
-struct Votes {
-    question: String,
-    yes: u64,
-    no: u64,
-}
-
-type State = nostr_bot::State<Votes>;
-
-fn format_results(question: &str, votes: &Votes) -> String {
-    format!(
-        "{}\n------------------\nyes: {}\nno:  {}",
-        question, votes.yes, votes.no
-    )
-}
-
-// Following functions are command responses, you are getting nostr event
-// and shared state as arguments and you are supposed to return non-signed
-// event which is then signed using the bot's key and send to relays
-async fn yes(event: Event, state: State) -> EventNonSigned {
-    let mut votes = state.lock().await;
-    votes.yes += 1;
-
-    // Use formatted voting results to create new event
-    // that is a reply to the incoming command
-    get_reply(event, format_results(&votes.question, &votes))
-}
-
-async fn no(event: Event, state: State) -> EventNonSigned {
-    let mut votes = state.lock().await;
-    votes.no += 1;
-    get_reply(event, format_results(&votes.question, &votes))
-}
-
-async fn results(event: Event, state: State) -> EventNonSigned {
-    let votes = state.lock().await;
-    get_reply(event, format_results(&votes.question, &votes))
-}
 
 #[tokio::main]
-async fn main() {
-    init_logger();
-
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut path = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
     path.push("..");
     path.push(".env");
-
 
     // Load environment variables from the specified path
     dotenv::from_path(&path).expect("Failed to load .env file");
     dotenv::dotenv().ok();
 
-
-    let relays = vec![
-        "wss://nostr-pub.wellorder.net",
-        "wss://relay.damus.io",
-        "wss://relay.nostr.info",
-    ];
+    // Access environment variables
     let privkey: String = env::var("PRIVKEY").expect("DATABASE_URL not set"); // Changed type to String
-    let keypair = keypair_from_secret(&privkey);
+    //let secret_key = SecretKey::from_str(&privkey).unwrap();
+    let my_keys = Keys::new(privkey.parse()?);
 
-    let intro = String::from("I am online!");
 
-    // Wrap your object into Arc<Mutex> so it can be shared among command handlers
-    let shared_state = wrap_state(Votes {
-        question: intro.clone(),
-        yes: 0,
-        no: 0,
-    });
 
-    // And now the Bot
-    Bot::new(keypair, relays, shared_state)
-        // You don't have to set these but then the bot will have incomplete profile info :(
-        .name("ChatBTC")
-        .about("A bot in development....")
-        .picture("https://themindfulinquisitor.com/wp-content/uploads/2023/05/2023-05-02-14.26.34.jpg")
-        //.intro_message(&intro)
-        // You don't have to specify any command but then what will the bot do? Nothing.
-        .command(Command::new("!yes", wrap!(yes)))
-        .command(Command::new("!no", wrap!(no)))
-        .command(Command::new("!results", wrap!(results)))
-        // And finally run it
-        .run()
-        .await;
+    //Relays for NDK
+    let client = Client::new(&my_keys);
+    client.add_relay("wss://relay.house", None).await?;
+    client.add_relay("wss://relay.damus.io", None).await?;
+    client.connect().await;
+
+
+    let personal_pubkey = XOnlyPublicKey::from_bech32(
+        "npub1249tdlkkwkv966uek7dd0duyl7x2ffdsyaugztsedrhwp3ktcflq66ys0r",
+    )
+        .unwrap();
+
+    client
+        .send_direct_msg(personal_pubkey, "My first DM from Nostr SDK!")
+        .await
+        .unwrap();
+
+
+    Ok(())
 }
