@@ -1,0 +1,17 @@
+{
+  "name": "chatbtc-nostr-ts",
+  "version": "1.0.0",
+  "description": "ChatBTC Bot for Nostr",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "start": "ts-node src/index.ts"
+  },
+  "author": "Sydney Bright",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
+}
